@@ -5,10 +5,8 @@ dotenv.load({ path: '.env' });
 const Web3 = require('web3');
 const HDWalletProvider = require("truffle-hdwallet-provider");
 
-const provider = new HDWalletProvider(
-    process.env.WALLET_PREVATE_KEY, process.env.RINKEPY_INFURA
-);
+const provider = null;
 
-const web3 = new Web3(provider);
+const web3 = null;
 
 export default web3;

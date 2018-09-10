@@ -20,8 +20,6 @@ export default function setRoutes(app) {
   router.route('/user/:id').delete(userCtrl.delete);
 
   // Batchs
-  router.route('/testget').get(batchCtrl.testGet);
-  router.route('/testset').get(batchCtrl.testSet);
   router.route('/batchs').get(batchCtrl.getAll);
   router.route('/batchs/count').get(batchCtrl.count);
   router.route('/batch').post(batchCtrl.getHash);

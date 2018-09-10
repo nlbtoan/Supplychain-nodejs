@@ -3,8 +3,8 @@ import web3 from './web3';
 
 dotenv.load({ path: '.env' });
 
-const address = process.env.CONTRACT_ADDRESS;
+const address = null;
 
-const abi = JSON.parse(process.env.CONTRACT_ABI);
+const abi = null;
 
 export default new web3.eth.Contract(abi, address);
