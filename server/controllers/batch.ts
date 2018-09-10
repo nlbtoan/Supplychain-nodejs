@@ -69,32 +69,4 @@ export default class StageCtrl extends BaseCtrl {
     }
   }
 
-  testGet = async (req, res) => {
-    goodschain.options.gasPrice = '3000000000';
-    goodschain.options.gas = 100000;
-
-    const data = await goodschain.methods.getShipment(1).call();
-
-    if (data) {
-      res.status(200).json(data);
-    } else {
-      res.sendStatus(403);
-    }
-  }
-
-  testSet = async (req, res) => {
-    const accounts = await web3.eth.getAccounts();
-    goodschain.options.gasPrice = '3000000000';
-    goodschain.options.gas = 100000;
-    const data = await goodschain.methods.addHash(1, 1, 'abc').send({
-      from: accounts[0],
-    });
-
-    if (data) {
-      res.status(200).json(data);
-    } else {
-      res.sendStatus(403);
-    }
-  }
-
 }
