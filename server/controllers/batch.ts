@@ -15,18 +15,63 @@ export default class StageCtrl extends BaseCtrl {
   // URL: api/getHash
   getHash = (req, res) => {
     console.log(req.body);
+    this.ipfs.addJSON(req.body, async(err, result) => {
+      console.log(result);
+      if (result){
+        const accounts = await web3.eth.getAccounts();
+        goodschain.options.gasPrice = (process.env.GAS_PRICE).toString();
+        goodschain.options.gas = process.env.GAS_LIMIT;
+        const data = await goodschain.methods.addHash(req.body.batch, req.body.stage, result).send({
+          from: accounts[0],
+        });
+        console.log(data);
+        if (data) {
+          delete req.body.xmlFile;
+          req.body.hash = result;
+          req.body.txHash = data.transactionHash;
+          const obj = new this.model(req.body);
+          obj.save((error, item) => {
+            if (error && error.code === 11000){
+              res.sendStatus(400).json(error);
+            } else {
+              res.status(200).json(item);
+            }
+          });
+        } else {
+          res.sendStatus(403);
+        }
+      } else {
+        console.log(err);
+      }
+    })
   }
 
   // Step: 2
   // URL: api/getdata
   getData = (req, res) => {
     console.log(req.body);
+    this.ipfs.catJSON(req.body.hash, (err, result)=>{
+      if (result){
+        res.status(200).json(result);
+        console.log(result);
+      } else {
+        res.sendStatus(403).json(err);
+      }
+    });
   }
 
   // Step: 3
   // URL: api/verifydata
   verifyData = async (req, res) => {
     console.log(req.body);
+    goodschain.options.gasPrice = (process.env.GAS_PRICE).toString();
+    goodschain.options.gas = process.env.GAS_LIMIT;
+    const data = await goodschain.methods.verifyHash(req.body.batch, req.body.stage, req.body.hash).call();
+    if (data){
+      res.status(200).json(data);
+    } else {
+      res.sendStatus(403);
+    }
   }
 
 }
